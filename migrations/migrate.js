@@ -14,14 +14,13 @@ if (!process.env.DATABASE_URL) {
 // Configurar conexión
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: false // Desactivar SSL en local
+    ssl: false
 });
 
 const migrate = async () => {
     try {
-        console.log("🚀 Ejecutando migraciones...");
-        
-        // Ejemplo: crea la tabla si no existe
+        console.log("Ejecutando migraciones...");
+
         await pool.query(`
             CREATE TABLE IF NOT EXISTS horarios (
                 id SERIAL PRIMARY KEY,

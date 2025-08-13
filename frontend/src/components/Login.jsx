@@ -1,29 +1,25 @@
-// src/components/RegisterForm.jsx
+// src/components/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "../index.css";
 
-export default function RegisterForm() {
+export default function Login() {
   const [usuario, setUsuario] = useState("");
   const [clave, setClave] = useState("");
-  const [confirmar, setConfirmar] = useState("");
   const [mensaje, setMensaje] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setMensaje("");
 
-    if (!usuario || !clave || !confirmar) {
-      setMensaje("Todos los campos son obligatorios.");
-      return;
-    }
-    if (clave !== confirmar) {
-      setMensaje("Las contraseñas no coinciden.");
+    if (!usuario || !clave) {
+      setMensaje("Por favor, complete todos los campos.");
       return;
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/register", {
+      const res = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usuario, clave }),
@@ -32,9 +28,16 @@ export default function RegisterForm() {
       const data = await res.json();
 
       if (res.ok) {
-        navigate("/");
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("usuario", usuario);
+
+        if (data.completo === false) {
+          navigate("/local-form");
+        } else {
+          navigate("/catalog");
+        }
       } else {
-        setMensaje(data.error || "Error al registrar.");
+        setMensaje(data.error || "Error al iniciar sesión.");
       }
     } catch (err) {
       setMensaje("No se pudo conectar al servidor.");
@@ -43,8 +46,8 @@ export default function RegisterForm() {
 
   return (
     <div className="container">
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleRegister} className="form-box">
+      <h2>Iniciar Sesión</h2>
+      <form onSubmit={handleLogin} className="form-box">
         <input
           type="text"
           placeholder="Usuario"
@@ -57,15 +60,12 @@ export default function RegisterForm() {
           value={clave}
           onChange={(e) => setClave(e.target.value)}
         />
-        <input
-          type="password"
-          placeholder="Confirmar Contraseña"
-          value={confirmar}
-          onChange={(e) => setConfirmar(e.target.value)}
-        />
-        <button type="submit">Registrarse</button>
+        <button type="submit">Ingresar</button>
       </form>
       {mensaje && <p className="mensaje-error">{mensaje}</p>}
+      <p>
+        ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
+      </p>
     </div>
   );
 }
