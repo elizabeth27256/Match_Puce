@@ -3,9 +3,12 @@ import db from '../db.js';
 
 const router = express.Router();
 
-router.post('/registrar', async (req, res) => {
+router.post('/register', async (req, res) => {
   const { nombres, cedula, correo, telefono, usuario, contrasena, repetirContrasena } = req.body;
 
+  if (!nombres || !cedula || !correo || !telefono || !usuario || !contrasena || !repetirContrasena) {
+    return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
+  }
   if (!correo.endsWith('@puce.edu.ec')) {
     return res.status(400).json({ mensaje: 'Correo debe tener el dominio @puce.edu.ec' });
   }
@@ -14,9 +17,6 @@ router.post('/registrar', async (req, res) => {
   }
   if (contrasena !== repetirContrasena) {
     return res.status(400).json({ mensaje: 'Las contraseñas no coinciden' });
-  }
-  if (!nombres || !cedula || !correo || !telefono || !usuario || !contrasena || !repetirContrasena) {
-    return res.status(400).json({ mensaje: 'Todos los campos son obligatorios' });
   }
   if (cedula.length !== 10 || isNaN(cedula)) {
     return res.status(400).json({ mensaje: 'Cédula debe tener 10 dígitos y ser numérica' });

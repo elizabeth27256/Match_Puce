@@ -1,71 +1,288 @@
-// src/components/LocalForm.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 
 export default function LocalForm() {
-  const [entrada, setEntrada] = useState("");
-  const [salida, setSalida] = useState("");
+  const [horarios, setHorarios] = useState({});
   const [sector, setSector] = useState("");
-  const [mensaje, setMensaje] = useState("");
-  const navigate = useNavigate();
+  const [resultado, setResultado] = useState({ mensaje: "", tipo: "", tabla: "" });
+  const dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    setMensaje("");
-
-    if (!entrada || !salida || !sector) {
-      setMensaje("Todos los campos son obligatorios.");
+  useEffect(() => {
+    const usuario_id = localStorage.getItem("usuario_id");
+    if (!usuario_id) {
+      window.location.href = "/";
       return;
     }
 
+    const forzar = localStorage.getItem("forzarHorario") === "1";
+    if (!forzar) {
+      (async () => {
+        try {
+          const API = "http://localhost:5000/api";
+          const resp = await fetch(`${API}/horarios/${usuario_id}`);
+          const info = await resp.json();
+          if (info.existe) {
+            window.location.href = "/catalog";
+          }
+        } catch (e) {
+          console.error("No se pudo verificar horarios:", e);
+        }
+      })();
+    } else {
+      localStorage.removeItem("forzarHorario");
+    }
+  }, []);
+
+  const toggleHorario = (dia) => {
+    setHorarios((prev) => ({
+      ...prev,
+      [dia]: prev[dia] ? null : { entrada: "", salida: "" },
+    }));
+  };
+
+  const handleChangeHora = (dia, campo, valor) => {
+    setHorarios((prev) => ({
+      ...prev,
+      [dia]: { ...prev[dia], [campo]: valor },
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let algunoMarcado = false;
+    let error = false;
+    const horariosValidos = {};
+
+    dias.forEach((dia) => {
+      if (horarios[dia]) {
+        algunoMarcado = true;
+        const { entrada, salida } = horarios[dia];
+        if (!entrada || !salida) {
+          error = true;
+        } else {
+          horariosValidos[dia] = { entrada, salida };
+        }
+      }
+    });
+
+    if (!algunoMarcado) {
+      setResultado({
+        mensaje: "Selecciona al menos un día y completa los horarios.",
+        tipo: "warning",
+        tabla: "",
+      });
+      return;
+    }
+
+    if (error) {
+      setResultado({
+        mensaje: "Por favor, completa las horas de entrada y salida para los días seleccionados.",
+        tipo: "warning",
+        tabla: "",
+      });
+      return;
+    }
+
+    const usuario_id = localStorage.getItem("usuario_id");
+    if (!usuario_id) {
+      setResultado({
+        mensaje: "No se ha iniciado sesión. Por favor, inicia sesión primero.",
+        tipo: "danger",
+        tabla: "",
+      });
+      return;
+    }
+
+    const payload = {
+      horarios: horariosValidos,
+      sector,
+      usuario_id,
+    };
+
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3000/api/local-data", {
+      const API = "http://localhost:5000/api";
+      const res = await fetch(`${API}/horarios`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ entrada, salida, sector }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
+      const result = await res.json();
+
       if (res.ok) {
-        navigate("/catalog");
+        let tablaHorarios = `<table class="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th>Día</th>
+              <th>Hora de entrada</th>
+              <th>Hora de salida</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+        for (const dia in horariosValidos) {
+          tablaHorarios += `
+            <tr>
+              <td style="text-transform: capitalize;">${dia}</td>
+              <td>${horariosValidos[dia].entrada}</td>
+              <td>${horariosValidos[dia].salida}</td>
+            </tr>`;
+        }
+
+        tablaHorarios += `</tbody></table>`;
+
+        setResultado({
+          mensaje: result.mensaje,
+          tipo: "success",
+          tabla: tablaHorarios,
+        });
+
+        setHorarios({});
+        setSector("");
       } else {
-        const data = await res.json();
-        setMensaje(data.error || "Error al guardar datos.");
+        setResultado({
+          mensaje: result.mensaje || "Error al guardar horarios.",
+          tipo: "warning",
+          tabla: "",
+        });
       }
     } catch (err) {
-      setMensaje("No se pudo conectar al servidor.");
+      setResultado({
+        mensaje: "No se pudo conectar al servidor.",
+        tipo: "danger",
+        tabla: "",
+      });
     }
   };
 
   return (
-    <div className="container">
-      <h2>Datos para Coincidencias</h2>
-      <form onSubmit={handleSave} className="form-box">
-        <label>Hora de entrada:</label>
-        <input
-          type="time"
-          value={entrada}
-          onChange={(e) => setEntrada(e.target.value)}
-        />
-        <label>Hora de salida:</label>
-        <input
-          type="time"
-          value={salida}
-          onChange={(e) => setSalida(e.target.value)}
-        />
-        <label>Sector:</label>
-        <select value={sector} onChange={(e) => setSector(e.target.value)}>
-          <option value="">Seleccione un sector</option>
-          <option value="Norte">Norte</option>
-          <option value="Centro">Centro</option>
-          <option value="Sur">Sur</option>
-        </select>
-        <button type="submit">Guardar</button>
-      </form>
-      {mensaje && <p className="mensaje-error">{mensaje}</p>}
+    <div className="registro-horarios container mt-4">
+      <h2>Registra tus Horarios</h2>
+      <div className="card shadow">
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            {dias.map((dia) => (
+              <div className="form-check mb-2" key={dia}>
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id={dia}
+                  checked={horarios[dia] !== null}
+                  onChange={() =>
+                    setHorarios((prev) => ({
+                      ...prev,
+                      [dia]: prev[dia] ? null : { entrada: "", salida: "" },
+                    }))
+                  }
+                />
+                <label className="form-check-label" htmlFor={dia}>
+                  {dia.charAt(0).toUpperCase() + dia.slice(1)}
+                </label>
+
+                {horarios[dia] && (
+                  <div className="row g-2 mt-1 ms-3">
+                    <div className="col">
+                      <label className="form-label">Hora de entrada</label>
+                      <input
+                        type="time"
+                        className="form-control"
+                        value={horarios[dia].entrada}
+                        onChange={(e) =>
+                          setHorarios((prev) => ({
+                            ...prev,
+                            [dia]: { ...prev[dia], entrada: e.target.value },
+                          }))
+                        }
+                      />
+                    </div>
+                    <div className="col">
+                      <label className="form-label">Hora de salida</label>
+                      <input
+                        type="time"
+                        className="form-control"
+                        value={horarios[dia].salida}
+                        onChange={(e) =>
+                          setHorarios((prev) => ({
+                            ...prev,
+                            [dia]: { ...prev[dia], salida: e.target.value },
+                          }))
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+
+
+            <div className="mb-3">
+              <label className="form-label">Selecciona sector:</label>
+              <select
+                className="form-select"
+                value={sector}
+                onChange={(e) => setSector(e.target.value)}
+                required
+              >
+                <option value="">Selecciona tu sector</option>
+                <optgroup label="Centro de Quito">
+                  <option value="Centro Histórico">Centro Histórico</option>
+                  <option value="San Marcos">San Marcos</option>
+                  <option value="La Marín">La Marín</option>
+                  <option value="Itchimbía">Itchimbía</option>
+                  <option value="El Tejar">El Tejar</option>
+                  <option value="El Panecillo">El Panecillo</option>
+                </optgroup>
+                <optgroup label="Norte de Quito">
+                  <option value="La Carolina">La Carolina</option>
+                  <option value="Iñaquito">Iñaquito</option>
+                  <option value="El Inca">El Inca</option>
+                  <option value="Kennedy">Kennedy</option>
+                  <option value="Jipijapa">Jipijapa</option>
+                  <option value="Cotocollao">Cotocollao</option>
+                  <option value="Carcelén">Carcelén</option>
+                  <option value="El Condado">El Condado</option>
+                </optgroup>
+                <optgroup label="Sur de Quito">
+                  <option value="Chimbacalle">Chimbacalle</option>
+                  <option value="Solanda">Solanda</option>
+                  <option value="El Recreo">El Recreo</option>
+                  <option value="La Magdalena">La Magdalena</option>
+                  <option value="Quitumbe">Quitumbe</option>
+                  <option value="El Calzado">El Calzado</option>
+                  <option value="San Bartolo">San Bartolo</option>
+                  <option value="La Ecuatoriana">La Ecuatoriana</option>
+                </optgroup>
+                <optgroup label="Valles y Periferia Urbana">
+                  <option value="Cumbayá">Cumbayá</option>
+                  <option value="Valle de los Chillos">Valle de los Chillos</option>
+                  <option value="Tumbaco">Tumbaco</option>
+                  <option value="Puembo">Puembo</option>
+                  <option value="Conocoto">Conocoto</option>
+                  <option value="Sangolquí">Sangolquí</option>
+                  <option value="San Rafael">San Rafael</option>
+                  <option value="Nayón">Nayón</option>
+                </optgroup>
+              </select>
+            </div>
+
+            <div className="text-end">
+              <button type="submit" className="btn btn-primary">
+                Guardar
+              </button>
+            </div>
+          </form>
+
+          {resultado.mensaje && (
+            <div
+              className={`alert alert-${resultado.tipo} mt-4`}
+              dangerouslySetInnerHTML={{
+                __html: `<strong>${resultado.mensaje}</strong> ${resultado.tabla || ""
+                  }`,
+              }}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

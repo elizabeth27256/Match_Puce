@@ -1,47 +1,36 @@
-// src/components/Catalog.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Catalog() {
-  const [coincidencias, setCoincidencias] = useState([]);
-  const [mensaje, setMensaje] = useState("");
-
-  useEffect(() => {
-    const fetchCoincidencias = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:3000/api/coincidencias", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-
-        if (res.ok) {
-          setCoincidencias(data);
-          if (data.length === 0) {
-            setMensaje("No se registran coincidencias.");
-          }
-        } else {
-          setMensaje(data.error || "Error al obtener coincidencias.");
-        }
-      } catch (err) {
-        setMensaje("No se pudo conectar al servidor.");
-      }
-    };
-    fetchCoincidencias();
-  }, []);
+  const navigate = useNavigate();
+  const coincidencias = []; // Aquí iría la lógica de coincidencias
 
   return (
-    <div className="container">
+    <div>
+      <header className="encabezado">
+        <h1 className="logo">MatchPUCE</h1>
+        <button className="btn-cerrar" onClick={() => navigate("/")}>
+          Cerrar sesión
+        </button>
+      </header>
+
       <h2>Coincidencias de Horarios</h2>
-      {mensaje && <p>{mensaje}</p>}
-      <div className="cards">
-        {coincidencias.map((c, idx) => (
-          <div className="card" key={idx}>
-            <h3>{c.usuario}</h3>
-            <p><strong>Cédula:</strong> {c.cedula}</p>
-            <p><strong>Sector:</strong> {c.sector}</p>
-            <p><strong>Teléfono:</strong> {c.telefono}</p>
-          </div>
-        ))}
+      <div className="cartas-container">
+        {coincidencias.length === 0 ? (
+          <p>No se registran coincidencias</p>
+        ) : (
+          coincidencias.map((c, i) => (
+            <div className="carta" key={i}>
+              <p>{c}</p>
+            </div>
+          ))
+        )}
+      </div>
+
+      <div className="text-center">
+        <button className="btn-horario" onClick={() => navigate("/local-form")}>
+          Registrar nuevo horario
+        </button>
       </div>
     </div>
   );
