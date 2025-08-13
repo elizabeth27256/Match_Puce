@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LocalForm() {
+  const navigate = useNavigate();
   const dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
   const [horarios, setHorarios] = useState(() =>
@@ -24,9 +26,6 @@ export default function LocalForm() {
           const API = "http://localhost:5000/api";
           const resp = await fetch(`${API}/horarios/${usuario_id}`);
           const info = await resp.json();
-          if (info.existe) {
-            window.location.href = "/catalog";
-          }
         } catch (e) {
           console.error("No se pudo verificar horarios:", e);
         }
@@ -109,29 +108,7 @@ export default function LocalForm() {
       const result = await res.json();
 
       if (res.ok) {
-        let tablaHorarios = `<table class="table table-striped mt-3">
-          <thead>
-            <tr>
-              <th>Día</th>
-              <th>Hora de entrada</th>
-              <th>Hora de salida</th>
-            </tr>
-          </thead>
-          <tbody>`;
-
-        for (const dia in horariosValidos) {
-          tablaHorarios += `
-            <tr>
-              <td style="text-transform: capitalize;">${dia}</td>
-              <td>${horariosValidos[dia].entrada}</td>
-              <td>${horariosValidos[dia].salida}</td>
-            </tr>`;
-        }
-
-        tablaHorarios += `</tbody></table>`;
-
-        setResultado({ mensaje: result.mensaje, tipo: "success", tabla: tablaHorarios });
-        setSector("");
+        navigate("/catalog");
       } else {
         setResultado({ mensaje: result.mensaje || "Error al guardar horarios.", tipo: "warning", tabla: "" });
       }

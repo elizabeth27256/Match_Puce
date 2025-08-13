@@ -1,37 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const API = "http://localhost:5000/api";
 
 export default function Catalog() {
   const navigate = useNavigate();
-  const coincidencias = []; // Aquí iría la lógica de coincidencias
+  const [coincidencias, setCoincidencias] = useState([]);
+  const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    const usuario_id = localStorage.getItem("usuario_id");
+    if (!usuario_id) {
+      navigate("/");
+      return;
+    }
+
+    const cargar = async () => {
+      try {
+        const resp = await fetch(`${API}/coincidences/${usuario_id}`);
+        const data = await resp.json();
+
+        if (Array.isArray(data.coincidencias) && data.coincidencias.length > 0) {
+          setCoincidencias(data.coincidencias);
+          setMensaje("");
+        } else {
+          setCoincidencias([]);
+          setMensaje("No se registran coincidencias");
+        }
+      } catch (e) {
+        console.error(e);
+        setCoincidencias([]);
+        setMensaje("No se registran coincidencias");
+      }
+    };
+
+    cargar();
+  }, [navigate]);
+
+  const handleCerrar = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
+  const handleNuevoHorario = () => {
+    localStorage.setItem("forzarHorario", "1"); // activa modo forzado
+    navigate("/local-form");
+  };
 
   return (
-    <div>
+    <>
       <header className="encabezado">
         <h1 className="logo">MatchPUCE</h1>
-        <button className="btn-cerrar" onClick={() => navigate("/")}>
+        <button className="btn-cerrar" onClick={handleCerrar}>
           Cerrar sesión
         </button>
       </header>
 
       <h2>Coincidencias de Horarios</h2>
-      <div className="cartas-container">
-        {coincidencias.length === 0 ? (
-          <p>No se registran coincidencias</p>
-        ) : (
-          coincidencias.map((c, i) => (
-            <div className="carta" key={i}>
-              <p>{c}</p>
-            </div>
-          ))
-        )}
+
+      <div id="cartas" className="cartas-container">
+        {coincidencias.map((c, idx) => (
+          <div key={idx} className="carta">
+            <p><strong>Usuario:</strong> {c.usuario}</p>
+            <p><strong>Nombre:</strong> {c.nombres}</p>
+            <p><strong>Cédula:</strong> {c.cedula}</p>
+            <p><strong>Teléfono:</strong> {c.telefono}</p>
+            <p><strong>Sector:</strong> {c.sector}</p>
+          </div>
+        ))}
       </div>
 
-      <div className="text-center">
-        <button className="btn-horario" onClick={() => navigate("/local-form")}>
+      {mensaje && <p id="mensaje">{mensaje}</p>}
+
+      <div className="text-center" style={{ marginTop: 16 }}>
+        <button className="btn-horario" onClick={handleNuevoHorario}>
           Registrar nuevo horario
         </button>
       </div>
-    </div>
+    </>
   );
 }
