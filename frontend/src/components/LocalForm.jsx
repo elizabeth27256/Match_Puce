@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 
 export default function LocalForm() {
-  const [horarios, setHorarios] = useState({});
-  const [sector, setSector] = useState("");
-  const [resultado, setResultado] = useState({ mensaje: "", tipo: "", tabla: "" });
   const dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 
+  const [horarios, setHorarios] = useState(() =>
+    dias.reduce((acc, dia) => ({ ...acc, [dia]: { entrada: "", salida: "", activo: false } }), {})
+  );
+  const [sector, setSector] = useState("");
+  const [resultado, setResultado] = useState({ mensaje: "", tipo: "", tabla: "" });
+
+  // Verificar si el usuario ya tiene horarios
   useEffect(() => {
     const usuario_id = localStorage.getItem("usuario_id");
     if (!usuario_id) {
@@ -32,13 +36,15 @@ export default function LocalForm() {
     }
   }, []);
 
+  // Activar o desactivar dia
   const toggleHorario = (dia) => {
     setHorarios((prev) => ({
       ...prev,
-      [dia]: prev[dia] ? null : { entrada: "", salida: "" },
+      [dia]: { ...prev[dia], activo: !prev[dia].activo },
     }));
   };
 
+  // Cambio de hora de entrada o salida
   const handleChangeHora = (dia, campo, valor) => {
     setHorarios((prev) => ({
       ...prev,
@@ -54,14 +60,11 @@ export default function LocalForm() {
     const horariosValidos = {};
 
     dias.forEach((dia) => {
-      if (horarios[dia]) {
+      if (horarios[dia].activo) {
         algunoMarcado = true;
         const { entrada, salida } = horarios[dia];
-        if (!entrada || !salida) {
-          error = true;
-        } else {
-          horariosValidos[dia] = { entrada, salida };
-        }
+        if (!entrada || !salida) error = true;
+        else horariosValidos[dia] = { entrada, salida };
       }
     });
 
@@ -93,11 +96,7 @@ export default function LocalForm() {
       return;
     }
 
-    const payload = {
-      horarios: horariosValidos,
-      sector,
-      usuario_id,
-    };
+    const payload = { horarios: horariosValidos, sector, usuario_id };
 
     try {
       const API = "http://localhost:5000/api";
@@ -131,27 +130,13 @@ export default function LocalForm() {
 
         tablaHorarios += `</tbody></table>`;
 
-        setResultado({
-          mensaje: result.mensaje,
-          tipo: "success",
-          tabla: tablaHorarios,
-        });
-
-        setHorarios({});
+        setResultado({ mensaje: result.mensaje, tipo: "success", tabla: tablaHorarios });
         setSector("");
       } else {
-        setResultado({
-          mensaje: result.mensaje || "Error al guardar horarios.",
-          tipo: "warning",
-          tabla: "",
-        });
+        setResultado({ mensaje: result.mensaje || "Error al guardar horarios.", tipo: "warning", tabla: "" });
       }
     } catch (err) {
-      setResultado({
-        mensaje: "No se pudo conectar al servidor.",
-        tipo: "danger",
-        tabla: "",
-      });
+      setResultado({ mensaje: "No se pudo conectar al servidor.", tipo: "danger", tabla: "" });
     }
   };
 
@@ -167,53 +152,36 @@ export default function LocalForm() {
                   className="form-check-input"
                   type="checkbox"
                   id={dia}
-                  checked={horarios[dia] !== null}
-                  onChange={() =>
-                    setHorarios((prev) => ({
-                      ...prev,
-                      [dia]: prev[dia] ? null : { entrada: "", salida: "" },
-                    }))
-                  }
+                  checked={horarios[dia].activo}
+                  onChange={() => toggleHorario(dia)}
                 />
                 <label className="form-check-label" htmlFor={dia}>
                   {dia.charAt(0).toUpperCase() + dia.slice(1)}
                 </label>
 
-                {horarios[dia] && (
-                  <div className="row g-2 mt-1 ms-3">
-                    <div className="col">
-                      <label className="form-label">Hora de entrada</label>
-                      <input
-                        type="time"
-                        className="form-control"
-                        value={horarios[dia].entrada}
-                        onChange={(e) =>
-                          setHorarios((prev) => ({
-                            ...prev,
-                            [dia]: { ...prev[dia], entrada: e.target.value },
-                          }))
-                        }
-                      />
-                    </div>
-                    <div className="col">
-                      <label className="form-label">Hora de salida</label>
-                      <input
-                        type="time"
-                        className="form-control"
-                        value={horarios[dia].salida}
-                        onChange={(e) =>
-                          setHorarios((prev) => ({
-                            ...prev,
-                            [dia]: { ...prev[dia], salida: e.target.value },
-                          }))
-                        }
-                      />
-                    </div>
+                {/* Inputs de hora */}
+                <div className={`row g-2 mt-1 ms-3 ${horarios[dia].activo ? "show" : ""}`}>
+                  <div className="col">
+                    <label className="form-label">Hora de entrada</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={horarios[dia].entrada}
+                      onChange={(e) => handleChangeHora(dia, "entrada", e.target.value)}
+                    />
                   </div>
-                )}
+                  <div className="col">
+                    <label className="form-label">Hora de salida</label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      value={horarios[dia].salida}
+                      onChange={(e) => handleChangeHora(dia, "salida", e.target.value)}
+                    />
+                  </div>
+                </div>
               </div>
             ))}
-
 
             <div className="mb-3">
               <label className="form-label">Selecciona sector:</label>
@@ -224,6 +192,7 @@ export default function LocalForm() {
                 required
               >
                 <option value="">Selecciona tu sector</option>
+
                 <optgroup label="Centro de Quito">
                   <option value="Centro Histórico">Centro Histórico</option>
                   <option value="San Marcos">San Marcos</option>
@@ -232,6 +201,7 @@ export default function LocalForm() {
                   <option value="El Tejar">El Tejar</option>
                   <option value="El Panecillo">El Panecillo</option>
                 </optgroup>
+
                 <optgroup label="Norte de Quito">
                   <option value="La Carolina">La Carolina</option>
                   <option value="Iñaquito">Iñaquito</option>
@@ -242,6 +212,7 @@ export default function LocalForm() {
                   <option value="Carcelén">Carcelén</option>
                   <option value="El Condado">El Condado</option>
                 </optgroup>
+
                 <optgroup label="Sur de Quito">
                   <option value="Chimbacalle">Chimbacalle</option>
                   <option value="Solanda">Solanda</option>
@@ -252,6 +223,7 @@ export default function LocalForm() {
                   <option value="San Bartolo">San Bartolo</option>
                   <option value="La Ecuatoriana">La Ecuatoriana</option>
                 </optgroup>
+
                 <optgroup label="Valles y Periferia Urbana">
                   <option value="Cumbayá">Cumbayá</option>
                   <option value="Valle de los Chillos">Valle de los Chillos</option>
@@ -276,8 +248,7 @@ export default function LocalForm() {
             <div
               className={`alert alert-${resultado.tipo} mt-4`}
               dangerouslySetInnerHTML={{
-                __html: `<strong>${resultado.mensaje}</strong> ${resultado.tabla || ""
-                  }`,
+                __html: `<strong>${resultado.mensaje}</strong> ${resultado.tabla || ""}`,
               }}
             />
           )}

@@ -21,14 +21,8 @@ body {
 }
 
 @keyframes slideFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(25px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* 3. Encabezado y logo */
@@ -54,62 +48,37 @@ body {
 }
 
 /* 4. Botones generales */
+.btn-cerrar, .btn-horario, .btn-primary, button[type="submit"] {
+  cursor: pointer;
+  border: none;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: all 0.35s ease;
+}
+
 .btn-cerrar {
   background: linear-gradient(to right, #003366, #0055aa);
   color: white;
-  font-weight: bold;
-  border: none;
   padding: 10px 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
-
-.btn-cerrar:hover {
-  background: #ffd700;
-  color: #003366;
-  box-shadow: 0 0 10px #ffd700cc;
-  transform: scale(1.05);
-}
+.btn-cerrar:hover { background: #ffd700; color: #003366; transform: scale(1.05); }
 
 .btn-horario {
   background: linear-gradient(to right, #003366, #0055aa);
   color: white;
-  font-weight: bold;
-  border: none;
   padding: 12px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
+.btn-horario:hover { background: #ffd700; color: #003366; transform: scale(1.05); }
 
-.btn-horario:hover {
-  background: #ffd700;
-  color: #003366;
-  box-shadow: 0 0 10px #ffd700cc;
-  transform: scale(1.05);
-}
-
-/* 5. Botón primario */
-.btn-primary {
+.btn-primary, button[type="submit"] {
   background: linear-gradient(90deg, #003366, #0055aa);
-  font-weight: 700;
-  font-size: 1.15rem;
+  color: white;
   padding: 14px 0;
-  border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 85, 170, 0.4);
-  cursor: pointer;
-  border: none;
   width: 100%;
-  transition: all 0.35s ease;
+  font-size: 1.1rem;
+  box-shadow: 0 6px 15px rgba(0, 85, 170, 0.4);
 }
-
-.btn-primary:hover {
-  background: #ffd700;
-  color: #003366;
-  box-shadow: 0 0 20px #ffd700cc;
-  transform: scale(1.07);
-}
+.btn-primary:hover, button[type="submit"]:hover { background: #ffd700; color: #003366; transform: scale(1.07); }
 
 /* 6. Formularios y campos */
 form#loginForm {
@@ -118,31 +87,13 @@ form#loginForm {
   border-radius: 16px;
   box-shadow: 0 0 20px rgba(0, 85, 170, 0.15);
   width: 360px;
-  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
   border: 1.5px solid transparent;
   margin: 0 auto;
-  box-sizing: border-box;
 }
-
-form#loginForm:hover {
-  box-shadow: 0 0 30px rgba(0, 85, 170, 0.35);
-  border-color: #0055aa;
-}
-
-form#loginForm h2 {
-  color: #003366;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 24px;
-  font-size: 1.8rem;
-  letter-spacing: 1px;
-  user-select: none;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
+form#loginForm:hover { box-shadow: 0 0 30px rgba(0, 85, 170, 0.35); border-color: #0055aa; }
 
 form#loginForm .campo {
   display: flex;
@@ -152,97 +103,18 @@ form#loginForm .campo {
   border-radius: 12px;
   padding: 10px 16px;
   background: #f9fbff;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
-
 form#loginForm .campo:focus-within {
   border-color: #0055aa;
   box-shadow: 0 0 8px #0055aa88;
   background: #e9f0ff;
 }
-
-form#loginForm .campo input[type="text"],
-form#loginForm .campo input[type="password"] {
+form#loginForm .campo input[type="text"], form#loginForm .campo input[type="password"] {
   border: none;
   outline: none;
   background: transparent;
-  font-size: 1rem;
-  color: #222;
   width: 100%;
-  padding: 0;
-  box-sizing: border-box;
-  text-align: left;
-}
-
-form#loginForm input::placeholder {
-  color: #7a8ca1;
-  font-style: italic;
-}
-
-form#loginForm input[type="text"]:focus,
-form#loginForm input[type="password"]:focus {
-  border-color: #0055aa;
-  box-shadow: none; 
-  background: transparent;
-}
-
-button[type="submit"] {
-  background: linear-gradient(to right, #003366, #0055aa);
-  color: white;
-  border: none;
-  font-weight: 700;
-  border-radius: 12px;
-  padding: 14px 0;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 85, 170, 0.3);
-  user-select: none;
-  letter-spacing: 0.03em;
-}
-
-button[type="submit"]:hover {
-  background: #ffd700;
-  color: #003366;
-  box-shadow: 0 0 20px #ffd700cc;
-  transform: scale(1.05);
-}
-
-form#loginForm .error {
-  color: #b30000;
-  background: #fff3cd;
-  border-left: 4px solid #ffd700;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  margin-bottom: 10px;
-  min-height: 24px;
-  display: none;
-  user-select: none;
-  box-shadow: 0 2px 8px rgba(179, 0, 0, 0.15);
-}
-
-form#loginForm .error.show {
-  display: block;
-}
-
-form#loginForm .registro-link {
-  font-size: 0.95rem;
-  text-align: center;
-  color: #003366;
-  margin-top: 14px;
-  user-select: none;
-}
-
-form#loginForm .registro-link a {
-  color: #0055aa;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.3s ease;
-}
-
-form#loginForm .registro-link a:hover {
-  color: #ffd700;
-  text-decoration: underline;
+  font-size: 1rem;
 }
 
 /* 7. Contenedores y tarjetas */
@@ -251,57 +123,26 @@ form#loginForm .registro-link a:hover {
   flex-wrap: wrap;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
   max-width: 960px;
   width: 100%;
   margin: 20px;
   overflow: hidden;
 }
+.form-registro { flex: 1 1 60%; padding: 40px; display: flex; flex-direction: column; gap: 18px; background: white; border-radius: 0 16px 16px 0; }
 
-.form-registro {
-  flex: 1 1 60%;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  background: white;
-  border-radius: 0 16px 16px 0;
-}
+/* 8. Campos y selectores */
+.campo { display: flex; align-items: center; border: 1px solid #b3c6e0; border-radius: 8px; padding: 10px 12px; background: #f9fbff; }
+.campo i { margin-right: 10px; color: #003366; }
+.campo input { border: none; outline: none; font-size: 1rem; background: transparent; width: 100%; }
 
-.form-registro h2 {
-  text-align: center;
-  color: #003366;
-}
+select { padding: 10px; font-size: 1rem; border-radius: 8px; border: 1px solid #b3c6e0; width: 100%; }
+select:focus { box-shadow: 0 0 8px #0055aa88; border-color: #0055aa; }
 
-.carta {
-  background: #ffffffcc;
-  padding: 20px;
-  border-radius: 16px;
-  margin: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  max-width: 350px;
-  width: 100%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  backdrop-filter: blur(6px);
-}
+/* 9. Errores */
+.error { color: #b30000; background: #fff3cd; border-left: 4px solid #ffd700; border-radius: 6px; padding: 10px 14px; font-size: 0.95rem; margin-bottom: 6px; min-height: 22px; }
+.error:empty { display: none; }
 
-.carta:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-}
-
-.carta strong {
-  color: #003366;
-}
-
-.cartas-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
+/* 10. Horarios y filas*/
 .registro-horarios {
   max-width: 500px;
   width: 90%;
@@ -310,6 +151,7 @@ form#loginForm .registro-link a:hover {
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 85, 170, 0.2);
   animation: slideFadeIn 0.8s ease forwards;
+  overflow: hidden;
 }
 
 .registro-horarios h2 {
@@ -319,75 +161,7 @@ form#loginForm .registro-link a:hover {
   letter-spacing: 1.5px;
 }
 
-/* 8. Campos y selectores */
-.campo {
-  display: flex;
-  align-items: center;
-  border: 1px solid #b3c6e0;
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #f9fbff;
-  transition: box-shadow 0.3s;
-}
-
-.campo i {
-  margin-right: 10px;
-  color: #003366;
-}
-
-.campo input {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  background: transparent;
-  width: 100%;
-}
-
-.campo input:focus {
-  box-shadow: 0 0 8px #0055aa88;
-}
-
-select {
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #b3c6e0;
-  transition: box-shadow 0.3s ease;
-  width: 100%;
-}
-
-select:focus {
-  box-shadow: 0 0 8px #0055aa88;
-  border-color: #0055aa;
-}
-
-select option {
-  padding: 6px;
-}
-
-select optgroup {
-  font-weight: bold;
-  background-color: #f0f8ff;
-  color: #003366;
-}
-
-/* 9. Errores */
-.error {
-  color: #b30000;
-  background: #fff3cd;
-  border-left: 4px solid #ffd700;
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  margin-bottom: 6px;
-  min-height: 22px;
-}
-
-.error:empty {
-  display: none;
-}
-
-/* 10. Horarios y filas */
+/* Filas de horario ocultas por defecto */
 .row.g-2 {
   max-height: 0;
   opacity: 0;
@@ -396,8 +170,9 @@ select optgroup {
   pointer-events: none;
 }
 
+/* Mostrar al hacer clic */
 .row.g-2.show {
-  max-height: 140px;
+  max-height: 200px; 
   opacity: 1;
   pointer-events: auto;
 }
@@ -439,60 +214,13 @@ select optgroup {
   border: 1.5px solid #b3c6e0;
   padding: 8px 12px;
   font-size: 1rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 120px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  opacity: 0;            
+  pointer-events: none;  
 }
 
-.hora-par input[type="time"]:focus {
-  border-color: #0055aa;
-  box-shadow: 0 0 8px #0055aa88;
-  outline: none;
-}
-
-/* 11. Otros */
-.form-check-input {
-  width: 1.3em;
-  height: 1.3em;
-  cursor: pointer;
-  border: 2px solid #0055aa;
-  transition: background-color 0.3s, border-color 0.3s;
-  box-shadow: 0 0 3px rgba(0, 85, 170, 0.2);
-}
-
-.form-check-input:hover {
-  border-color: #ffd700;
-  box-shadow: 0 0 8px #ffd700aa;
-}
-
-.form-check-input:checked {
-  background-color: #0055aa;
-  border-color: #0055aa;
-  box-shadow: 0 0 10px #0055aaaa;
-}
-
-.form-check-label {
-  cursor: pointer;
-  font-weight: 600;
-  color: #003366;
-}
-
-#resultado {
-  font-weight: 600;
-  color: #0055aa;
-  text-align: center;
-  margin-top: 20px;
-}
-
-h2 {
-  color: #fff;
-  margin-bottom: 20px;
-  text-align: center;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-p {
-  font-size: 1rem;
-  line-height: 1.6;
-  margin-bottom: 16px;
+.row.g-2.show .hora-par input[type="time"] {
+  opacity: 1;
+  pointer-events: auto;
 }
