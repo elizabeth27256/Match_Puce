@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "../index.css";
 
 export default function Login() {
+  // Estados para usuario, contraseña y error
   const [usuario, setUsuario] = useState("");
   const [contrasena, setClave] = useState("");
   const [error, setError] = useState("");
@@ -22,6 +23,7 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
+        // Guarda datos en localStorage y redirige si es exitoso
         localStorage.setItem("usuario", usuario);
         localStorage.setItem("usuario_id", data.usuario.id);
         navigate("/local-form");

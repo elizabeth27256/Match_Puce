@@ -8,6 +8,7 @@ export default function Catalog() {
   const [coincidencias, setCoincidencias] = useState([]);
   const [mensaje, setMensaje] = useState("");
 
+// useEffect se ejecuta al cargar el componente
   useEffect(() => {
     const usuario_id = localStorage.getItem("usuario_id");
     if (!usuario_id) {
@@ -15,6 +16,7 @@ export default function Catalog() {
       return;
     }
 
+// función para cargar las coincidencias desde el backend
     const cargar = async () => {
       try {
         const resp = await fetch(`${API}/coincidences/${usuario_id}`);
