@@ -1,5 +1,4 @@
-// src/components/RegisterForm.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 
@@ -32,7 +31,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const API = "http://localhost:5000/api"; // ⚠ Cambia si tu backend está en otro puerto o dominio
+      const API = "http://localhost:5000/api";
       const res = await fetch(`${API}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -43,7 +42,7 @@ export default function RegisterForm() {
           telefono: formData.telefono,
           usuario: formData.usuario,
           contrasena: formData.contrasena,
-          repetirContrasena: formData.repetirContrasena, // 🔹 Ahora sí lo mandamos
+          repetirContrasena: formData.repetirContrasena,
         }),
       });
 
