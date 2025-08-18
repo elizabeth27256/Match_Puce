@@ -27,6 +27,10 @@ router.post('/horarios', async (req, res) => {
   }
 
   try {
+    // Primero eliminar horarios existentes para este usuario
+    await db.query('DELETE FROM horarios WHERE usuario_id = $1', [usuario_id]);
+    
+    // Luego insertar los nuevos horarios
     for (const item of valores) {
       await db.query(
         `INSERT INTO horarios (dia, hora_entrada, hora_salida, sector, usuario_id)
@@ -52,6 +56,20 @@ router.get('/horarios/:usuario_id', async (req, res) => {
     res.json({ existe: rows.length > 0 });
   } catch (err) {
     res.status(500).json({ mensaje: 'Error al verificar horarios', error: err.message });
+  }
+});
+
+// Nueva ruta para obtener horarios completos de un usuario
+router.get('/horarios-completos/:usuario_id', async (req, res) => {
+  const { usuario_id } = req.params;
+  try {
+    const { rows } = await db.query(
+      'SELECT dia, hora_entrada, hora_salida, sector FROM horarios WHERE usuario_id = $1 ORDER BY dia',
+      [usuario_id]
+    );
+    res.json({ horarios: rows });
+  } catch (err) {
+    res.status(500).json({ mensaje: 'Error al obtener horarios', error: err.message });
   }
 });
 

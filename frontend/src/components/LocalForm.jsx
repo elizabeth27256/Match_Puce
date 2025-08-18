@@ -10,6 +10,7 @@ export default function LocalForm() {
   );
   const [sector, setSector] = useState("");
   const [resultado, setResultado] = useState({ mensaje: "", tipo: "", tabla: "" });
+  const [esEdicion, setEsEdicion] = useState(false);
 
   // Verificar si el usuario ya tiene horarios
   useEffect(() => {
@@ -26,12 +27,50 @@ export default function LocalForm() {
           const API = "http://localhost:5000/api";
           const resp = await fetch(`${API}/horarios/${usuario_id}`);
           const info = await resp.json();
+          
+          // Si ya tiene horarios y no es forzado, redirigir a coincidencias
+          if (info.existe) {
+            navigate("/catalog");
+            return;
+          }
         } catch (e) {
           console.error("No se pudo verificar horarios:", e);
         }
       })();
     } else {
       localStorage.removeItem("forzarHorario");
+      // Cargar horarios existentes para edición
+      (async () => {
+        try {
+          const API = "http://localhost:5000/api";
+          const resp = await fetch(`${API}/horarios-completos/${usuario_id}`);
+          const data = await resp.json();
+          
+          if (data.horarios && data.horarios.length > 0) {
+            // Cargar horarios existentes en el estado
+            const horariosExistentes = {};
+            let sectorExiste = "";
+            
+            data.horarios.forEach(h => {
+              horariosExistentes[h.dia] = {
+                entrada: h.hora_entrada,
+                salida: h.hora_salida,
+                activo: true
+              };
+              if (!sectorExiste) sectorExiste = h.sector;
+            });
+            
+            setHorarios(prev => ({
+              ...prev,
+              ...horariosExistentes
+            }));
+            setSector(sectorExiste);
+            setEsEdicion(true);
+          }
+        } catch (e) {
+          console.error("No se pudieron cargar horarios existentes:", e);
+        }
+      })();
     }
   }, [navigate]);
 
@@ -134,7 +173,7 @@ export default function LocalForm() {
 
       {/* CONTENIDO DEL FORMULARIO */}
       <div className="registro-horarios container mt-4">
-        <h2>Registra tus Horarios</h2>
+        <h2>{esEdicion ? "Editar Horarios" : "Registra tus Horarios"}</h2>
         <div className="card shadow">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
@@ -226,7 +265,7 @@ export default function LocalForm() {
 
               <div className="text-end">
                 <button type="submit" className="btn btn-primary">
-                  Guardar
+                  {esEdicion ? "Actualizar" : "Guardar"}
                 </button>
               </div>
             </form>

@@ -4,9 +4,10 @@ const pool = new pg.Pool({
   user: "postgres",
   host: "localhost",
   database: "catalogo",
-  password: "1234",
+  password: "cris123",
   port: 5432,
   ssl: false
 });
 
 export default pool;
+

@@ -23,10 +23,26 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // Guarda datos en localStorage y redirige si es exitoso
+        // Guarda datos en localStorage
         localStorage.setItem("usuario", usuario);
         localStorage.setItem("usuario_id", data.usuario.id);
-        navigate("/local-form");
+        
+        // Verificar si el usuario ya tiene horarios registrados
+        try {
+          const horariosRes = await fetch(`http://localhost:5000/api/horarios/${data.usuario.id}`);
+          const horariosData = await horariosRes.json();
+          
+          if (horariosData.existe) {
+            // Si ya tiene horarios, ir directo a coincidencias
+            navigate("/catalog");
+          } else {
+            // Si no tiene horarios, ir a registro de horarios
+            navigate("/local-form");
+          }
+        } catch (err) {
+          // Si hay error al verificar, ir a registro de horarios por defecto
+          navigate("/local-form");
+        }
       } else {
         setError(data.message || "Credenciales incorrectas");
       }
