@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 
-
 const API = "http://localhost:5000/api";
 
 export default function Catalog() {
@@ -10,16 +9,14 @@ export default function Catalog() {
   const [coincidencias, setCoincidencias] = useState([]);
   const [mensaje, setMensaje] = useState("");
 
-// useEffect se ejecuta al cargar el componente
   useEffect(() => {
     const usuario_id = localStorage.getItem("usuario_id");
     if (!usuario_id) {
-      navigate("/");
+      navigate("/"); // Redirige si no hay usuario
       return;
     }
 
-// función para cargar las coincidencias desde el backend
-    const cargar = async () => {
+    const cargarCoincidencias = async () => {
       try {
         const resp = await fetch(`${API}/coincidences/${usuario_id}`);
         const data = await resp.json();
@@ -29,16 +26,16 @@ export default function Catalog() {
           setMensaje("");
         } else {
           setCoincidencias([]);
-          setMensaje("No se registran coincidencias");
+          setMensaje("No se registran coincidencias.");
         }
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
         setCoincidencias([]);
-        setMensaje("No se registran coincidencias");
+        setMensaje("Error al cargar las coincidencias.");
       }
     };
 
-    cargar();
+    cargarCoincidencias();
   }, [navigate]);
 
   const handleCerrar = () => {
@@ -47,7 +44,7 @@ export default function Catalog() {
     navigate("/");
   };
 
-  const handleNuevoHorario = async () => {
+  const handleNuevoHorario = () => {
     localStorage.setItem("forzarHorario", "1");
     navigate("/local-form");
   };
@@ -55,23 +52,24 @@ export default function Catalog() {
   return (
     <>
       <Header />
+      <div className="cartas-container">
+        <h2 className="catalog-titulo">Coincidencias de Horarios</h2>
 
-      <h2>Coincidencias de Horarios</h2>
-
-      <div id="cartas" className="cartas-container">
-        {coincidencias.map((c, idx) => (
-          <div key={idx} className="carta">
-            <p><strong>Usuario:</strong> {c.usuario}</p>
-            <p><strong>Nombre:</strong> {c.nombres}</p>
-            <p><strong>Cédula:</strong> {c.cedula}</p>
-            <p><strong>Teléfono:</strong> {c.telefono}</p>
-            <p><strong>Sector:</strong> {c.sector}</p>
-          </div>
-        ))}
+        {coincidencias.length > 0 ? (
+          coincidencias.map((c, idx) => (
+            <div key={idx} className="carta">
+              <h3>{c.nombres}</h3>
+              <p><strong>Usuario:</strong> {c.usuario}</p>
+              <p><strong>Cédula:</strong> {c.cedula}</p>
+              <p><strong>Teléfono:</strong> {c.telefono}</p>
+              <p><strong>Sector:</strong> {c.sector}</p>
+            </div>
+          ))
+        ) : (
+          <p id="mensaje">{mensaje}</p>
+        )}
       </div>
-
-      {mensaje && <p id="mensaje">{mensaje}</p>}
-
+      
       <div className="text-center" style={{ marginTop: 16 }}>
         <button className="btn-horario" onClick={handleNuevoHorario}>
           Registrar nuevo horario
@@ -80,3 +78,4 @@ export default function Catalog() {
     </>
   );
 }
+

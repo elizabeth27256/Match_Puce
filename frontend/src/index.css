@@ -1,5 +1,10 @@
 /* 1. Documento */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
 body {
   font-family: "Segoe UI", Arial, sans-serif;
   background: linear-gradient(135deg, #3d90d7, #1b4f72);
@@ -61,14 +66,22 @@ body {
   color: white;
   padding: 10px 16px;
 }
-.btn-cerrar:hover { background: #ffd700; color: #003366; transform: scale(1.05); }
+.btn-cerrar:hover { 
+  background: #ffd700; 
+  color: #003366; 
+  transform: scale(1.05); 
+}
 
 .btn-horario {
   background: linear-gradient(to right, #003366, #0055aa);
   color: white;
   padding: 12px 20px;
 }
-.btn-horario:hover { background: #ffd700; color: #003366; transform: scale(1.05); }
+.btn-horario:hover { 
+  background: #ffd700; 
+  color: #003366; 
+  transform: scale(1.05); 
+}
 
 .btn-primary, button[type="submit"] {
   background: linear-gradient(90deg, #003366, #0055aa);
@@ -78,7 +91,11 @@ body {
   font-size: 1.1rem;
   box-shadow: 0 6px 15px rgba(0, 85, 170, 0.4);
 }
-.btn-primary:hover, button[type="submit"]:hover { background: #ffd700; color: #003366; transform: scale(1.07); }
+.btn-primary:hover, button[type="submit"]:hover { 
+  background: #ffd700; 
+  color: #003366; 
+  transform: scale(1.07); 
+}
 
 /* 6. Formularios y campos */
 form#loginForm {
@@ -93,7 +110,10 @@ form#loginForm {
   border: 1.5px solid transparent;
   margin: 0 auto;
 }
-form#loginForm:hover { box-shadow: 0 0 30px rgba(0, 85, 170, 0.35); border-color: #0055aa; }
+form#loginForm:hover { 
+  box-shadow: 0 0 30px rgba(0, 85, 170, 0.35); 
+  border-color: #0055aa; 
+}
 
 form#loginForm .campo {
   display: flex;
@@ -109,7 +129,8 @@ form#loginForm .campo:focus-within {
   box-shadow: 0 0 8px #0055aa88;
   background: #e9f0ff;
 }
-form#loginForm .campo input[type="text"], form#loginForm .campo input[type="password"] {
+form#loginForm .campo input[type="text"], 
+form#loginForm .campo input[type="password"] {
   border: none;
   outline: none;
   background: transparent;
@@ -128,18 +149,51 @@ form#loginForm .campo input[type="text"], form#loginForm .campo input[type="pass
   margin: 100px 20px 20px 20px;
   overflow: hidden;
 }
-.form-registro { flex: 1 1 60%; padding: 40px; display: flex; flex-direction: column; gap: 18px; background: white; border-radius: 0 16px 16px 0; }
+.form-registro { 
+  flex: 1 1 60%; 
+  padding: 40px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 18px; 
+  background: white; 
+  border-radius: 0 16px 16px 0; 
+}
 
 /* 8. Campos y selectores */
-.campo { display: flex; align-items: center; border: 1px solid #b3c6e0; border-radius: 8px; padding: 10px 12px; background: #f9fbff; }
+.campo { 
+  display: flex; 
+  align-items: center; 
+  border: 1px solid #b3c6e0; 
+  border-radius: 8px; 
+  padding: 10px 12px; 
+  background: #f9fbff; 
+}
 .campo i { margin-right: 10px; color: #003366; }
 .campo input { border: none; outline: none; font-size: 1rem; background: transparent; width: 100%; }
 
-select { padding: 10px; font-size: 1rem; border-radius: 8px; border: 1px solid #b3c6e0; width: 100%; }
-select:focus { box-shadow: 0 0 8px #0055aa88; border-color: #0055aa; }
+select { 
+  padding: 10px; 
+  font-size: 1rem; 
+  border-radius: 8px; 
+  border: 1px solid #b3c6e0; 
+  width: 100%; 
+}
+select:focus { 
+  box-shadow: 0 0 8px #0055aa88; 
+  border-color: #0055aa; 
+}
 
 /* 9. Errores */
-.error { color: #b30000; background: #fff3cd; border-left: 4px solid #ffd700; border-radius: 6px; padding: 10px 14px; font-size: 0.95rem; margin-bottom: 6px; min-height: 22px; }
+.error { 
+  color: #b30000; 
+  background: #fff3cd; 
+  border-left: 4px solid #ffd700; 
+  border-radius: 6px; 
+  padding: 10px 14px; 
+  font-size: 0.95rem; 
+  margin-bottom: 6px; 
+  min-height: 22px; 
+}
 .error:empty { display: none; }
 
 /* 10. Horarios y filas*/
@@ -224,14 +278,142 @@ select:focus { box-shadow: 0 0 8px #0055aa88; border-color: #0055aa; }
   opacity: 1;
   pointer-events: auto;
 }
+
+/* 12. Schedules (Lista de horarios) */
+.schedules-container {
+  max-width: 960px;
+  width: 95%;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px 35px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 85, 170, 0.2);
+  margin: 120px auto 40px auto;
+  animation: slideFadeIn 0.8s ease forwards;
+}
+
+.schedules-container h2 {
+  color: #003366;
+  margin-bottom: 20px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* Tabla de horarios */
+.schedules-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.schedules-table thead {
+  background: linear-gradient(90deg, #003366, #0055aa);
+  color: #fff;
+}
+
+.schedules-table th,
+.schedules-table td {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.schedules-table tbody tr {
+  border-bottom: 1px solid #ddd;
+  transition: background 0.3s ease;
+}
+
+.schedules-table tbody tr:hover {
+  background: #f1f5ff;
+}
+
+/* Botón eliminar (coherente con tu .btn-cerrar) */
+.btn-eliminar {
+  background: linear-gradient(to right, #aa0000, #cc0000);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-eliminar:hover {
+  background: #ffd700;
+  color: #660000;
+  transform: scale(1.05);
+}
+
+/* Contenedor principal de cartas */
+.cartas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  max-width: 960px; 
+  margin: 120px auto 40px auto;
+  padding: 30px 35px; 
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 85, 170, 0.2);
+  animation: slideFadeIn 0.8s ease forwards;
+}
+
+/* Título dentro del fondo blanco y centrado */
+.catalog-titulo {
+  color: #003366;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  grid-column: 1 / -1; /* ocupa todo el ancho del grid */
+}
+
+/* Cartas individuales */
+.carta {
+  background: #fff; 
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 85, 170, 0.15);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+/* Hover: solo movimiento */
+.carta:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 25px rgba(0, 85, 170, 0.25);
+}
+
+.carta h3 {
+  color: #003366;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.carta p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #003366;
+}
+
+.carta strong {
+  color: #0055aa;
+}
+
 /* 11. Navbar */
 .navbar {
   width: 100%;
   background: linear-gradient(90deg, #003366, #0055aa);
   position: fixed;
-  top: 70px; /* justo debajo del encabezado */
+  top: 70px; 
   left: 0;
-  z-index: 998; /* menor que el encabezado */
+  z-index: 998; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -247,9 +429,7 @@ select:focus { box-shadow: 0 0 8px #0055aa88; border-color: #0055aa; }
   padding: 0;
 }
 
-.navbar li {
-  display: inline;
-}
+.navbar li { display: inline; }
 
 .navbar a {
   color: #fff;

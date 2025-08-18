@@ -26,12 +26,12 @@ export default function Login() {
         // Guarda datos en localStorage
         localStorage.setItem("usuario", usuario);
         localStorage.setItem("usuario_id", data.usuario.id);
-        
+
         // Verificar si el usuario ya tiene horarios registrados
         try {
           const horariosRes = await fetch(`http://localhost:5000/api/horarios/${data.usuario.id}`);
           const horariosData = await horariosRes.json();
-          
+
           if (horariosData.existe) {
             // Si ya tiene horarios, ir directo a coincidencias
             navigate("/catalog");
@@ -52,37 +52,44 @@ export default function Login() {
   };
 
   return (
-    <form id="loginForm" onSubmit={handleSubmit}>
-      <h2>Iniciar Sesión</h2>
+    <>
+      {/* Franja blanca con el logo */}
+      <header className="encabezado">
+        <h1 className="logo">MatchPUCE</h1>
+      </header>
 
-      {error && <div className="error show">{error}</div>}
+      <form id="loginForm" onSubmit={handleSubmit}>
+        <h2>Iniciar Sesión</h2>
 
-      <div className="campo">
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-          required
-        />
-      </div>
+        {error && <div className="error show">{error}</div>}
 
-      <div className="campo">
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={contrasena}
-          onChange={(e) => setClave(e.target.value)}
-          required
-        />
-      </div>
+        <div className="campo">
+          <input
+            type="text"
+            placeholder="Usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+            required
+          />
+        </div>
 
-      <button type="submit">Ingresar</button>
+        <div className="campo">
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={contrasena}
+            onChange={(e) => setClave(e.target.value)}
+            required
+          />
+        </div>
 
-      <div className="registro-link">
-        ¿No tienes cuenta?{" "}
-        <Link to="/register">Registrar usuario</Link>
-      </div>
-    </form>
+        <button type="submit">Ingresar</button>
+
+        <div className="registro-link">
+          ¿No tienes cuenta?{" "}
+          <Link to="/register">Registrar usuario</Link>
+        </div>
+      </form>
+    </>
   );
 }

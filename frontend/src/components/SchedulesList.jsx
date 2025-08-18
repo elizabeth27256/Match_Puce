@@ -45,11 +45,11 @@ export default function SchedulesList() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="schedules-container">
       <h2>Mis Horarios Registrados</h2>
-      {mensaje && <div className="alert alert-info">{mensaje}</div>}
+      {mensaje && <div className="error">{mensaje}</div>}
       {horarios.length > 0 && (
-        <table className="table">
+        <table className="schedules-table">
           <thead>
             <tr>
               <th>Día</th>
@@ -68,7 +68,7 @@ export default function SchedulesList() {
                 <td>{h.sector}</td>
                 <td>
                   <button
-                    className="btn btn-danger btn-sm"
+                    className="btn-eliminar"
                     onClick={() => eliminarHorario(h.dia, h.hora_entrada, h.hora_salida, h.sector)}
                   >
                     Eliminar

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 import "../index.css";
 
 export default function RegisterForm() {
@@ -61,6 +62,9 @@ export default function RegisterForm() {
 
   return (
     <>
+      {/* 🔹 Franja blanca con logo, sin botón cerrar sesión */}
+      <Header showLogout={false} />
+
       <div className="registro-container">
         <form className="form-registro" onSubmit={handleSubmit}>
           <h2>
