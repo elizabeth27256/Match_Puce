@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
 
@@ -59,40 +59,56 @@ export default function RegisterForm() {
     }
   };
 
+  const handleCerrar = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
-    <div className="registro-container">
-      <form className="form-registro" onSubmit={handleSubmit}>
-        <h2>
-          <i className="fas fa-user-plus"></i> Formulario de Registro PUCE
-        </h2>
+    <>
+      {/* HEADER igual al de Catalog */}
+      <header className="encabezado">
+        <h1 className="logo">MatchPUCE</h1>
+        <button className="btn-cerrar" onClick={handleCerrar}>
+          Cerrar sesión
+        </button>
+      </header>
 
-        {[
-          ["nombres", "Nombres completos", "text", "fas fa-user"],
-          ["cedula", "Cédula", "text", "fas fa-id-card"],
-          ["correo", "Correo institucional (@puce.edu.ec)", "email", "fas fa-envelope"],
-          ["telefono", "Teléfono", "tel", "fas fa-phone"],
-          ["usuario", "Nombre de usuario", "text", "fas fa-user-circle"],
-          ["contrasena", "Contraseña", "password", "fas fa-lock"],
-          ["repetirContrasena", "Repetir contraseña", "password", "fas fa-lock"],
-        ].map(([id, placeholder, type, icon]) => (
-          <div className="campo" key={id}>
-            <i className={icon}></i>
-            <input
-              id={id}
-              type={type}
-              placeholder={placeholder}
-              value={formData[id]}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        ))}
+      {/* FORMULARIO DE REGISTRO */}
+      <div className="registro-container">
+        <form className="form-registro" onSubmit={handleSubmit}>
+          <h2>
+            <i className="fas fa-user-plus"></i> Formulario de Registro PUCE
+          </h2>
 
-        {error && <div className="error">{error}</div>}
-        {mensaje && <div className="mensaje-exito">{mensaje}</div>}
+          {[
+            ["nombres", "Nombres completos", "text", "fas fa-user"],
+            ["cedula", "Cédula", "text", "fas fa-id-card"],
+            ["correo", "Correo institucional (@puce.edu.ec)", "email", "fas fa-envelope"],
+            ["telefono", "Teléfono", "tel", "fas fa-phone"],
+            ["usuario", "Nombre de usuario", "text", "fas fa-user-circle"],
+            ["contrasena", "Contraseña", "password", "fas fa-lock"],
+            ["repetirContrasena", "Repetir contraseña", "password", "fas fa-lock"],
+          ].map(([id, placeholder, type, icon]) => (
+            <div className="campo" key={id}>
+              <i className={icon}></i>
+              <input
+                id={id}
+                type={type}
+                placeholder={placeholder}
+                value={formData[id]}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          ))}
 
-        <button type="submit">Registrarse</button>
-      </form>
-    </div>
+          {error && <div className="error">{error}</div>}
+          {mensaje && <div className="mensaje-exito">{mensaje}</div>}
+
+          <button type="submit">Registrarse</button>
+        </form>
+      </div>
+    </>
   );
 }

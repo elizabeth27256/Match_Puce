@@ -125,7 +125,7 @@ form#loginForm .campo input[type="text"], form#loginForm .campo input[type="pass
   border-radius: 16px;
   max-width: 960px;
   width: 100%;
-  margin: 20px;
+  margin: 100px 20px 20px 20px;
   overflow: hidden;
 }
 .form-registro { flex: 1 1 60%; padding: 40px; display: flex; flex-direction: column; gap: 18px; background: white; border-radius: 0 16px 16px 0; }
@@ -223,4 +223,46 @@ select:focus { box-shadow: 0 0 8px #0055aa88; border-color: #0055aa; }
 .row.g-2.show .hora-par input[type="time"] {
   opacity: 1;
   pointer-events: auto;
+}
+/* 11. Navbar */
+.navbar {
+  width: 100%;
+  background: linear-gradient(90deg, #003366, #0055aa);
+  position: fixed;
+  top: 70px; /* justo debajo del encabezado */
+  left: 0;
+  z-index: 998; /* menor que el encabezado */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.navbar a:hover {
+  background-color: #ffd700;
+  color: #003366;
+  transform: scale(1.05);
 }
