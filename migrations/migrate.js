@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import pkg from 'pg';
-import { dbConfig } from '../config.js';
+import { dbConfig } from '../backend/db.js';
 
 const { Pool } = pkg;
 
