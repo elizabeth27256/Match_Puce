@@ -14,6 +14,7 @@ export default function SchedulesList() {
       navigate("/");
       return;
     }
+
     fetch(`${API}/horarios-completos/${usuario_id}`)
       .then(res => res.json())
       .then(data => {
@@ -27,18 +28,24 @@ export default function SchedulesList() {
   }, [navigate]);
 
   const eliminarHorario = async (dia, hora_entrada, hora_salida, sector) => {
+    const confirmar = window.confirm("¿Estás seguro de que quieres eliminar este horario?");
+    if (!confirmar) return;
+
     const usuario_id = localStorage.getItem("usuario_id");
     if (!usuario_id) return;
+
     const res = await fetch(`${API}/horarios`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ usuario_id, dia, hora_entrada, hora_salida, sector }),
     });
+
     if (res.ok) {
-      setHorarios(horarios.filter(
+      const nuevosHorarios = horarios.filter(
         h => !(h.dia === dia && h.hora_entrada === hora_entrada && h.hora_salida === hora_salida && h.sector === sector)
-      ));
-      if (horarios.length === 1) setMensaje("No existen horarios registrados");
+      );
+      setHorarios(nuevosHorarios);
+      if (nuevosHorarios.length === 0) setMensaje("No existen horarios registrados");
     } else {
       setMensaje("No se pudo eliminar el horario");
     }
