@@ -59,22 +59,8 @@ export default function RegisterForm() {
     }
   };
 
-  const handleCerrar = () => {
-    localStorage.clear();
-    navigate("/");
-  };
-
   return (
     <>
-      {/* HEADER igual al de Catalog */}
-      <header className="encabezado">
-        <h1 className="logo">MatchPUCE</h1>
-        <button className="btn-cerrar" onClick={handleCerrar}>
-          Cerrar sesión
-        </button>
-      </header>
-
-      {/* FORMULARIO DE REGISTRO */}
       <div className="registro-container">
         <form className="form-registro" onSubmit={handleSubmit}>
           <h2>

@@ -16,7 +16,6 @@ router.post('/horarios', async (req, res) => {
   for (const dia of dias) {
     const { entrada, salida } = horarios[dia];
     if (!entrada || !salida) continue;
-
     valores.push({
       dia,
       entrada,
@@ -27,20 +26,15 @@ router.post('/horarios', async (req, res) => {
   }
 
   try {
-    // Primero eliminar horarios existentes para este usuario
-    await db.query('DELETE FROM horarios WHERE usuario_id = $1', [usuario_id]);
-    
-    // Luego insertar los nuevos horarios
-    for (const item of valores) {
+    // Inserta los nuevos horarios
+    for (const v of valores) {
       await db.query(
-        `INSERT INTO horarios (dia, hora_entrada, hora_salida, sector, usuario_id)
-         VALUES ($1, $2, $3, $4, $5)`,
-        [item.dia, item.entrada, item.salida, sector, item.usuario_id]
+        'INSERT INTO horarios (usuario_id, dia, hora_entrada, hora_salida, sector) VALUES ($1, $2, $3, $4, $5)',
+        [v.usuario_id, v.dia, v.entrada, v.salida, v.sector]
       );
     }
 
-    res.status(201).json({ mensaje: 'Horarios guardados correctamente.' });
-
+    res.json({ mensaje: 'Horarios guardados correctamente.' });
   } catch (error) {
     res.status(500).json({ mensaje: 'Error al guardar horarios.', error: error.message });
   }
@@ -70,6 +64,22 @@ router.get('/horarios-completos/:usuario_id', async (req, res) => {
     res.json({ horarios: rows });
   } catch (err) {
     res.status(500).json({ mensaje: 'Error al obtener horarios', error: err.message });
+  }
+});
+
+router.delete('/horarios', async (req, res) => {
+  const { usuario_id, dia, hora_entrada, hora_salida, sector } = req.body;
+  if (!usuario_id || !dia || !hora_entrada || !hora_salida || !sector) {
+    return res.status(400).json({ mensaje: 'Faltan datos para eliminar el horario.' });
+  }
+  try {
+    await db.query(
+      'DELETE FROM horarios WHERE usuario_id = $1 AND dia = $2 AND hora_entrada = $3 AND hora_salida = $4 AND sector = $5',
+      [usuario_id, dia, hora_entrada, hora_salida, sector]
+    );
+    res.json({ mensaje: 'Horario eliminado correctamente.' });
+  } catch (error) {
+    res.status(500).json({ mensaje: 'Error al eliminar el horario.', error: error.message });
   }
 });
 

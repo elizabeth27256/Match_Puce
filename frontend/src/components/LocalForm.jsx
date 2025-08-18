@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 
 export default function LocalForm() {
   const navigate = useNavigate();
@@ -10,68 +11,15 @@ export default function LocalForm() {
   );
   const [sector, setSector] = useState("");
   const [resultado, setResultado] = useState({ mensaje: "", tipo: "", tabla: "" });
-  const [esEdicion, setEsEdicion] = useState(false);
 
-  // Verificar si el usuario ya tiene horarios
+  // Verificar si el usuario está logueado
   useEffect(() => {
     const usuario_id = localStorage.getItem("usuario_id");
     if (!usuario_id) {
       navigate("/");
       return;
     }
-
-    const forzar = localStorage.getItem("forzarHorario") === "1";
-    if (!forzar) {
-      (async () => {
-        try {
-          const API = "http://localhost:5000/api";
-          const resp = await fetch(`${API}/horarios/${usuario_id}`);
-          const info = await resp.json();
-          
-          // Si ya tiene horarios y no es forzado, redirigir a coincidencias
-          if (info.existe) {
-            navigate("/catalog");
-            return;
-          }
-        } catch (e) {
-          console.error("No se pudo verificar horarios:", e);
-        }
-      })();
-    } else {
-      localStorage.removeItem("forzarHorario");
-      // Cargar horarios existentes para edición
-      (async () => {
-        try {
-          const API = "http://localhost:5000/api";
-          const resp = await fetch(`${API}/horarios-completos/${usuario_id}`);
-          const data = await resp.json();
-          
-          if (data.horarios && data.horarios.length > 0) {
-            // Cargar horarios existentes en el estado
-            const horariosExistentes = {};
-            let sectorExiste = "";
-            
-            data.horarios.forEach(h => {
-              horariosExistentes[h.dia] = {
-                entrada: h.hora_entrada,
-                salida: h.hora_salida,
-                activo: true
-              };
-              if (!sectorExiste) sectorExiste = h.sector;
-            });
-            
-            setHorarios(prev => ({
-              ...prev,
-              ...horariosExistentes
-            }));
-            setSector(sectorExiste);
-            setEsEdicion(true);
-          }
-        } catch (e) {
-          console.error("No se pudieron cargar horarios existentes:", e);
-        }
-      })();
-    }
+    // Ya no se verifica si tiene horarios previos, siempre permite registrar nuevos
   }, [navigate]);
 
   // Activar o desactivar dia
@@ -156,24 +104,12 @@ export default function LocalForm() {
     }
   };
 
-  const handleCerrar = () => {
-    localStorage.clear();
-    navigate("/");
-  };
-
   return (
     <>
-      {/* HEADER igual al de Catalog */}
-      <header className="encabezado">
-        <h1 className="logo">MatchPUCE</h1>
-        <button className="btn-cerrar" onClick={handleCerrar}>
-          Cerrar sesión
-        </button>
-      </header>
+      <Header />
 
-      {/* CONTENIDO DEL FORMULARIO */}
       <div className="registro-horarios container mt-4">
-        <h2>{esEdicion ? "Editar Horarios" : "Registra tus Horarios"}</h2>
+        <h2>Registra tus Horarios</h2>
         <div className="card shadow">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
@@ -265,7 +201,7 @@ export default function LocalForm() {
 
               <div className="text-end">
                 <button type="submit" className="btn btn-primary">
-                  {esEdicion ? "Actualizar" : "Guardar"}
+                  Guardar
                 </button>
               </div>
             </form>

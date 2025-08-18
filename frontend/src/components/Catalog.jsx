@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
+
 
 const API = "http://localhost:5000/api";
 
@@ -40,23 +42,19 @@ export default function Catalog() {
   }, [navigate]);
 
   const handleCerrar = () => {
+    localStorage.removeItem("forzarHorario");
     localStorage.clear();
     navigate("/");
   };
 
-  const handleNuevoHorario = () => {
-    localStorage.setItem("forzarHorario", "1"); // activa modo forzado
+  const handleNuevoHorario = async () => {
+    localStorage.setItem("forzarHorario", "1");
     navigate("/local-form");
   };
 
   return (
     <>
-      <header className="encabezado">
-        <h1 className="logo">MatchPUCE</h1>
-        <button className="btn-cerrar" onClick={handleCerrar}>
-          Cerrar sesión
-        </button>
-      </header>
+      <Header />
 
       <h2>Coincidencias de Horarios</h2>
 
