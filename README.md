@@ -1,37 +1,42 @@
-# APP MatchUce de Coincidencias para Rutas Seguras Dev Challenge
+## 🚗 APP MatchPUCE: Coincidencias para Rutas Seguras
 
- Es una aplicación diseñada para estudiantes personal de la Pontificia Universidad Católica del Ecuador que buscan movilizarse de manera más segura hacia y desde el campus. La app permite generar coincidencias entre personas que comparten rutas similares, fomentando el acompañamiento seguro y la colaboración entre miembros de la comunidad PUCE.
+Match PUCE es una aplicación web desarrollada con React para estudiantes y personal de la Pontificia Universidad Católica del Ecuador (PUCE).
+Su propósito es fomentar la seguridad y la colaboración dentro de la comunidad universitaria, permitiendo que los usuarios:
 
-## Objetivo
+✅ Se registren y completen su perfil.
 
-Promover la seguridad y la comunidad entre los miembros de la PUCE mediante una herramienta digital que incentive los trayectos compartidos, confiables y responsables.
+✅ Configuren sus rutas frecuentes y horarios habituales.
 
-##  Características
+✅ Encuentren coincidencias con otros miembros que compartan trayectos similares.
 
--  Registro de rutas frecuentes 
--  Emparejamiento inteligente de rutas similares en horarios compatibles
--  Visualización de rutas seguras recomendadas
--  Privacidad y seguridad de los datos personales
+## 🎯 Objetivo
 
-## Tecnologías utilizadas
+Brindar una herramienta digital que promueva trayectos compartidos, seguros y responsables, fortaleciendo la confianza y el sentido de comunidad en la PUCE.
 
-- Frontend (HTML, CSS, JavaScript)
-- Backend (Node.js)
-- Base de datos (MySQL, PostgreSQL)
+## ✨ Características principales
+
+📝 Registro y gestión de rutas frecuentes.
+
+🔎 Emparejamiento inteligente de usuarios según trayectos y horarios.
+
+🔒 Seguridad y privacidad en el manejo de datos personales.
+
+## 🛠️ Tecnologías utilizadas
+
+Frontend: ⚛️ React, HTML, CSS, JavaScript
+
+Backend: 🖥️ Node.js
+
+Base de datos: 🗄️ MySQL / PostgreSQL
+
+Gestión ágil: 📌 Scrum con Jira
 
 
 ## Cómo usar la app
 
 1. Regístrate con tus datos y correo institucional PUCE.
-  ![Captura de pantalla 2025-07-04 210225](https://github.com/user-attachments/assets/36f5626a-03ca-4e52-a9a9-6614ce640d21)
 2. Despues de registro logeate con tu usuario y contraseña.
-  ![Captura de pantalla 2025-07-04 210242](https://github.com/user-attachments/assets/339e38ac-24cc-41d9-aceb-a6b801ac4659)
-3. Configura tu ruta frecuente y tu horario habitual.
-  ![Captura de pantalla 2025-07-04 210235](https://github.com/user-attachments/assets/629467ea-42fb-4521-8e5a-e45b4998722a)
+3. Configura tu horario habitual.
 4. La app buscará coincidencias con otros usuarios que compartan rutas y horarios similares.
-  ![image](https://github.com/user-attachments/assets/a181470d-e4f9-4a1d-be98-eb1b46760ac0)
 5. Conéctate con tus coincidencias y coordina tu trayecto seguro.
 
-## En desarrollo
-
-Actualmente, la app se encuentra en fase de desarrollo. Algunas características pueden estar sujetas a cambios.
