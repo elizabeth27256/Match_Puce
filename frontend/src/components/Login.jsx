@@ -14,7 +14,8 @@ export default function Login() {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const API = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${API}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ usuario, contrasena: contrasena }),
@@ -29,7 +30,8 @@ export default function Login() {
 
         // Verificar si el usuario ya tiene horarios registrados
         try {
-          const horariosRes = await fetch(`http://localhost:5000/api/horarios/${data.usuario.id}`);
+          const API = import.meta.env.VITE_API_URL;
+          const horariosRes = await fetch(`${API}/horarios/${data.usuario.id}`);
           const horariosData = await horariosRes.json();
 
           if (horariosData.existe) {

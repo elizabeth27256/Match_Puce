@@ -85,7 +85,7 @@ export default function LocalForm() {
     const payload = { horarios: horariosValidos, sector, usuario_id };
 
     try {
-      const API = "http://localhost:5000/api";
+      const API = import.meta.env.VITE_API_URL;
       const res = await fetch(`${API}/horarios`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
