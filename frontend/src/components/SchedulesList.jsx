@@ -69,10 +69,10 @@ export default function SchedulesList() {
           <tbody>
             {horarios.map((h, idx) => (
               <tr key={idx}>
-                <td>{h.dia}</td>
-                <td>{h.hora_entrada}</td>
-                <td>{h.hora_salida}</td>
-                <td>{h.sector}</td>
+                <td data-label="Día">{h.dia}</td>
+                <td data-label="Entrada">{h.hora_entrada}</td>
+                <td data-label="Salida">{h.hora_salida}</td>
+                <td data-label="Sector">{h.sector}</td>
                 <td>
                   <button
                     className="btn-eliminar"
