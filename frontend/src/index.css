@@ -528,6 +528,77 @@ select:focus {
   }
 }
 
+/* Centrar y adaptar el formulario de registro en móvil */
+@media (max-width: 600px) {
+  .registro-container {
+    flex-direction: column;
+    align-items: center;
+    margin: 100px 0 20px 0;
+    padding: 0 4vw;
+    max-width: 100vw;
+    width: 100vw;
+    border-radius: 12px;
+  }
+  .form-registro {
+    width: 100%;
+    padding: 18px 6px;
+    border-radius: 10px;
+    min-width: unset;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+}
+
+/* Navbar: que no se superponga ni se esconda bajo el header */
+@media (max-width: 600px) {
+  .navbar {
+    position: fixed;
+    top: 100px; /* debajo del header */
+    left: 0;
+    width: 100vw;
+    z-index: 998;
+    padding: 8px 0;
+    background: linear-gradient(90deg, #003366, #0055aa);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .navbar ul {
+    flex-direction: column;
+    gap: 0;
+    align-items: stretch;
+    width: 100%;
+  }
+  .navbar li {
+    width: 100%;
+  }
+  .navbar a {
+    display: block;
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 0;
+    border-bottom: 1px solid #0055aa;
+    font-size: 1.1rem;
+    text-align: left;
+  }
+}
+
+/* Ajusta el header para que no tape la navbar */
+@media (max-width: 600px) {
+  .encabezado {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 999;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 10px;
+    gap: 10px;
+  }
+  body {
+    padding-top: 160px; /* header + navbar */
+  }
+}
+
 @media (max-width: 500px) {
   .schedules-table,
   .schedules-table thead,
