@@ -23,21 +23,6 @@ app.use('/api', loginRuta);
 app.use('/api', horariosRuta);
 app.use('/api/coincidences', coincidenciasRuta);
 
-// Configuración de paths
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Servir frontend de React en producción
-if (process.env.NODE_ENV === 'production') {
-  const frontendPath = path.join(__dirname, '../frontend/dist');
-  app.use(express.static(frontendPath));
-
-  // Para cualquier ruta que no sea de API, devolver el index.html de React
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendPath, 'index.html'));
-  });
-}
-
 // Puerto
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
