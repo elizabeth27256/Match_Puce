@@ -2,8 +2,6 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import 'dotenv/config';
 
 // Importar rutas API
@@ -13,8 +11,18 @@ import horariosRuta from './routes/schedules.js';
 import coincidenciasRuta from './routes/coincidences.js';
 
 const app = express();
+
+// Configurar CORS para permitir solo el frontend de Render
+const allowedOrigins = [
+  'https://match-puce-1.onrender.com',
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
+
 app.use(express.json());
-app.use(cors());
 app.use(bodyParser.json());
 
 // Rutas API
